@@ -10,6 +10,13 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * Класс CustomAuthenticationSuccessHandler представляет собой пользовательский обработчик успешной аутентификации,
+ * который наследуется от SimpleUrlAuthenticationSuccessHandler и переопределяет метод onAuthenticationSuccess.
+ * После успешной аутентификации метод onAuthenticationSuccess извлекает пользователя из Authentication объекта,
+ * получает идентификатор пользователя и формирует URL для перенаправления на страницу учетной записи пользователя.
+ * Затем происходит перенаправление пользователя на сформированный URL.
+ */
 @Component
 public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Override

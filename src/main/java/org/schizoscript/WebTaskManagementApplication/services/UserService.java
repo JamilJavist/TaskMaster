@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Класс UserService предоставляет сервисные методы для работы с пользователями.
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -17,6 +20,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Метод createUser создает нового пользователя на основе переданного объекта user, шифрует пароль, добавляет к нему
+     *      роль "ROLE_USER", сохраняет пользователя в базу и возвращает true.
+     * @param user Переданный пользователь.
+     * @return логическое значение, которое определяет сохранен ли новый пользователь или нет.
+     */
     public boolean createUser(UserEntity user) {
         String email = user.getEmail();
         if (userRepository.findByEmail(email) != null) return false;
