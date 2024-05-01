@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Master Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h4 {
+            color: #ffffff;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        form {
+            color: #ffffff;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        input[type="email"],
+        input[type="password"],
+        input[type="submit"] {
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #ffffff;
+            text-align: center;
+            display: block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h4>Authorization</h4>
+
+    <form action="/login" method="post">
+        email: <input type="email" name="username"><br><br>
+        password: <input type="password" name="password"><br><br>
+        <input type="hidden" th:name="_eventId" th:value="submit" />
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+        <input type="submit" value="Enter" class="button"/>
+    </form>
+
+    <a href="/registration" class="button">Registration</a>
+</body>
+</html>
