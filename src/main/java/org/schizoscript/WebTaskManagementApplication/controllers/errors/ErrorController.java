@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class ErrorController {
+    private final String ACCESS_DENIED_TEMPLATE_PATH = "errors/access-denied";
 
     /**
      * Метод, обрабатывающий запрос на генерацию страницы с сообщением об отказе в доступе.
@@ -15,6 +16,6 @@ public class ErrorController {
      */
     @GetMapping("/error/access-denied")
     public String accessDeniedError() {
-        return "access-denied";
+        return ACCESS_DENIED_TEMPLATE_PATH;
     }
 }

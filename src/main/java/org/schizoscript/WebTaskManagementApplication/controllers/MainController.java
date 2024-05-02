@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
 
+    private final String MAIN_PAGE_TEMPLATE_PATH = "auth/main";
+
     @GetMapping("/")
     public String main() {
-        return "main";
+        return MAIN_PAGE_TEMPLATE_PATH;
     }
 }

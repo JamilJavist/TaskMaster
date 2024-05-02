@@ -18,15 +18,17 @@ import java.security.Principal;
 public class AuthController {
 
     private final UserService userService;
-
+    private final String LOGIN_PAGE_TEMPLATE_PATH = "auth/login";
+    private final String REGISTRATION_PAGE_TEMPLATE_PATH = "auth/registration";
+    
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return LOGIN_PAGE_TEMPLATE_PATH;
     }
 
     @GetMapping("/registration")
     public String registration() {
-        return "registration";
+        return REGISTRATION_PAGE_TEMPLATE_PATH;
     }
 
     /**
@@ -40,7 +42,7 @@ public class AuthController {
     public String createUser(UserEntity user, Model model) {
         if (!userService.createUser(user)) {
             model.addAttribute("errorMessage", "Пользователь с " + user.getEmail() + " уже существует");
-            return "registration";
+            return REGISTRATION_PAGE_TEMPLATE_PATH;
         }
         return "redirect:/login";
     }
