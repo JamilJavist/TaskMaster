@@ -1,5 +1,6 @@
 package org.schizoscript.WebTaskManagementApplication.storage.entities;
 
+import lombok.Builder;
 import org.schizoscript.WebTaskManagementApplication.storage.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,9 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.*;
 
+@Data
 @Entity
 @Table(name = "users")
-@Data
 public class UserEntity implements UserDetails {
 
     @Id
@@ -38,6 +39,10 @@ public class UserEntity implements UserDetails {
 
     @Column(name = "dateOfCreated")
     private LocalDateTime dateOfCreated;
+
+    @OneToMany
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private List<ProjectEntity> projectsList = new ArrayList<>();
 
     @PrePersist
     private void init() {

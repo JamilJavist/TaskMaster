@@ -23,7 +23,7 @@ public class TaskEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(columnDefinition = "VARCHAR(MAX)")
+    @Column(columnDefinition = "text")
     private String description;
 
     @OneToOne

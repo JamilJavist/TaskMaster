@@ -7,6 +7,7 @@ import org.schizoscript.WebTaskManagementApplication.dtos.factories.ProjectDtoFa
 import org.schizoscript.WebTaskManagementApplication.exceptions.BadRequestException;
 import org.schizoscript.WebTaskManagementApplication.exceptions.NotFoundException;
 import org.schizoscript.WebTaskManagementApplication.storage.entities.ProjectEntity;
+import org.schizoscript.WebTaskManagementApplication.storage.entities.UserEntity;
 import org.schizoscript.WebTaskManagementApplication.storage.repositories.ProjectRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,19 +23,35 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class ProjectService {
 
+    private final UserService userService;
     private final ProjectRepository repository;
     private final ProjectDtoFactory dtoFactory;
+    private final AuxiliaryService auxService;
 
-    private List<ProjectDto> fetchProjectsByPrefixName(Optional<String> optionalPrefixName) {
+    private List<ProjectDto> fetchProjectsByPrefixName(Long userId, Optional<String> optionalPrefixName) {
+
         optionalPrefixName = optionalPrefixName.filter(prefixName -> !prefixName.trim().isEmpty());
 
-        Stream<ProjectEntity> projectsStream = optionalPrefixName
-                .map(repository::streamAllByNameStartsWithIgnoreCase)
-                .orElseGet(repository::streamAllBy);
+        Stream<ProjectEntity> projectsStream;
+
+        if (optionalPrefixName.isPresent()) {
+            projectsStream = repository.findProjectByUserIdAndNameStartingWith(userId, optionalPrefixName.get());
+        } else {
+            projectsStream = repository.findProjectByUserId(userId);
+        }
 
         return projectsStream
                 .map(dtoFactory::makeProjectDto)
                 .collect(Collectors.toList());
+//        optionalPrefixName = optionalPrefixName.filter(prefixName -> !prefixName.trim().isEmpty());
+//
+//        Stream<ProjectEntity> projectsStream = optionalPrefixName
+//                .map(repository::streamAllByNameStartsWithIgnoreCase)
+//                .orElseGet(repository::streamAllBy);
+//
+//        return projectsStream
+//                .map(dtoFactory::makeProjectDto)
+//                .collect(Collectors.toList());
     }
 
     private ProjectDto createProject(String projectName) {
@@ -92,22 +109,10 @@ public class ProjectService {
     }
 
     private AckDto deleteProject(Long projectId) {
-        getProjectOrThrowException(projectId);
+        auxService.getProjectOrThrowException(projectId);
 
         repository.deleteById(projectId);
 
         return AckDto.makeDefault(true);
-    }
-
-    private ProjectEntity getProjectOrThrowException(Long projectId) {
-        return repository
-                .findById(projectId)
-                .orElseThrow(() ->
-                        new NotFoundException(
-                                String.format(
-                                        "Project with \"%s\" doesn't exist.", projectId
-                                )
-                        )
-                );
     }
 }
