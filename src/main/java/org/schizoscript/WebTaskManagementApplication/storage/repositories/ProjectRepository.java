@@ -5,11 +5,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
     Optional<ProjectEntity> findByName(String name);
+
+    Optional<ProjectEntity> findById(Long id);
+
+    @Query("SELECT p FROM ProjectEntity p WHERE p.user.id = :userId AND p.id = :projectId")
+    Optional<ProjectEntity> findByUserIdAndById(@Param("userId") Long userId, @Param("projectId") Long projectId);
 
     @Query("SELECT p FROM ProjectEntity p WHERE p.user.id = :userId")
     Stream<ProjectEntity> streamAllByUserId(@Param("userId") Long userId);

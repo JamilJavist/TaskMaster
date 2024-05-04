@@ -72,6 +72,10 @@ public class ProjectService {
         return dtoFactory.makeProjectDto(project);
     }
 
+    public ProjectEntity getProjectById(Long projectId) {
+        return projectRepository.findById(projectId).orElseGet(null);
+    }
+
     private ProjectDto editProject(Long userId, Long projectId, String projectName) {
 
         if (projectName.trim().isEmpty()) {

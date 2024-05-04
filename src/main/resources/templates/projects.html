@@ -36,7 +36,9 @@
         </div>
 
         <div th:each="project : ${projectList}" class="project-card">
-            <h2><span th:text="${project.name}"></span></h2>
+            <a th:href="@{/account/{id}/projects/{projectId}(id=${id},projectId=${project.id})}">
+                <h2><span th:text="${project.name}"></span></h2>
+            </a>
             <p>Дата создания</p><span th:text="${project.createAt}"></span>
         </div>
     </div>
