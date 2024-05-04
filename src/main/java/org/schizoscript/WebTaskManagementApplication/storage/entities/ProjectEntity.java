@@ -27,6 +27,9 @@ public class ProjectEntity {
     @Builder.Default
     private Instant createAt = Instant.now();
 
+    @ManyToOne
+    private UserEntity user;
+
     @Builder.Default
     @OneToMany
     @JoinColumn(name = "project_id", referencedColumnName = "id")

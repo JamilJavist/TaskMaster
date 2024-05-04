@@ -36,6 +36,10 @@ public class UserEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private List<ProjectEntity> projectList = new ArrayList<>();
+
     @Column(name = "dateOfCreated")
     private LocalDateTime dateOfCreated;
 

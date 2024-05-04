@@ -7,7 +7,9 @@ import org.schizoscript.WebTaskManagementApplication.dtos.factories.ProjectDtoFa
 import org.schizoscript.WebTaskManagementApplication.exceptions.BadRequestException;
 import org.schizoscript.WebTaskManagementApplication.exceptions.NotFoundException;
 import org.schizoscript.WebTaskManagementApplication.storage.entities.ProjectEntity;
+import org.schizoscript.WebTaskManagementApplication.storage.entities.UserEntity;
 import org.schizoscript.WebTaskManagementApplication.storage.repositories.ProjectRepository;
+import org.schizoscript.WebTaskManagementApplication.storage.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,92 +24,83 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class ProjectService {
 
-    private final ProjectRepository repository;
+    private final AuxiliaryService auxService;
     private final ProjectDtoFactory dtoFactory;
+    private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
 
-    private List<ProjectDto> fetchProjectsByPrefixName(Optional<String> optionalPrefixName) {
+    public List<ProjectDto> fetchProjectsByPrefixName(Long userId, Optional<String> optionalPrefixName) {
+
         optionalPrefixName = optionalPrefixName.filter(prefixName -> !prefixName.trim().isEmpty());
 
-        Stream<ProjectEntity> projectsStream = optionalPrefixName
-                .map(repository::streamAllByNameStartsWithIgnoreCase)
-                .orElseGet(repository::streamAllBy);
+        Stream<ProjectEntity> projectsStream;
+
+        if (optionalPrefixName.isPresent()) {
+            projectsStream = projectRepository.streamAllByUserIdAndNameStartsWithPrefixName(userId, optionalPrefixName.get());
+        } else {
+            projectsStream = projectRepository.streamAllByUserId(userId);
+        }
 
         return projectsStream
                 .map(dtoFactory::makeProjectDto)
                 .collect(Collectors.toList());
     }
 
-    private ProjectDto createProject(String projectName) {
+    public ProjectDto createProject(Long userId, String projectName) {
 
         if (projectName.trim().isEmpty()) {
             throw new BadRequestException("Project name can't be empty");
         }
 
-        repository
-                .findByName(projectName)
-                .ifPresent(
-                        project -> {
-                            throw new BadRequestException(String.format("Project \"%s\" already exists.", projectName));
-                });
+        UserEntity user = auxService.getEntityOrThrowException(userRepository, userId, "User");
 
-        ProjectEntity project = repository.saveAndFlush(
+        for (ProjectEntity project : user.getProjectList()) {
+            if (project.getName().equalsIgnoreCase(projectName)) {
+                throw new BadRequestException(String.format("Project \"%s\" already exists.", projectName));
+            }
+        }
+
+        ProjectEntity project = projectRepository.saveAndFlush(
                 ProjectEntity.builder()
                         .name(projectName)
+                        .user(user)
                         .build()
         );
+
+        final ProjectEntity savedProject = projectRepository.saveAndFlush(project);
 
         return dtoFactory.makeProjectDto(project);
     }
 
-    private ProjectDto editProject(Long projectId, String projectName) {
+    private ProjectDto editProject(Long userId, Long projectId, String projectName) {
 
         if (projectName.trim().isEmpty()) {
             throw new BadRequestException("Project name can't be empty");
         }
 
-        ProjectEntity project = repository
-                .findById(projectId)
-                .orElseThrow(() ->
-                        new NotFoundException(
-                                String.format(
-                                        "Project with \"%s\" doesn't exists.",
-                                        projectName
-                                )
-                        )
-                );
+        UserEntity user = auxService.getEntityOrThrowException(userRepository, userId, "User");
 
-        repository
-                .findByName(projectName)
-                .filter(anotherProject -> !Objects.equals(anotherProject.getId(), projectId))
+        ProjectEntity project = auxService.getEntityOrThrowException(projectRepository, projectId, "Project");
+
+        projectRepository
+                .findProjectEntityByUserIdAndNameContainsIgnoreCase(project.getUser().getId(), projectName)
+                .filter(anotherProject -> !anotherProject.getId().equals(projectId))
                 .ifPresent(anotherProject -> {
                     throw new BadRequestException(String.format("Project \"%s\" already exists.", projectName));
                 });
 
-
         project.setName(projectName);
 
-        project = repository.saveAndFlush(project);
+        project = projectRepository.saveAndFlush(project);
 
         return dtoFactory.makeProjectDto(project);
     }
 
-    private AckDto deleteProject(Long projectId) {
-        getProjectOrThrowException(projectId);
+    private AckDto deleteProject(Long userId, Long projectId) {
+        ProjectEntity project = auxService.getEntityOrThrowException(projectRepository, userId, "Project");
 
-        repository.deleteById(projectId);
+        projectRepository.deleteById(projectId);
 
         return AckDto.makeDefault(true);
-    }
-
-    private ProjectEntity getProjectOrThrowException(Long projectId) {
-        return repository
-                .findById(projectId)
-                .orElseThrow(() ->
-                        new NotFoundException(
-                                String.format(
-                                        "Project with \"%s\" doesn't exist.", projectId
-                                )
-                        )
-                );
     }
 }

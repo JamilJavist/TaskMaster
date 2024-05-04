@@ -1,0 +1,82 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Добавим отступ сверху для размещения формы не сразу под заголовком */
+}
+
+.search-input {
+    padding: 5px;
+    margin-right: 5px;
+    width: 200px; /* Ширина поля ввода */
+}
+
+button {
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.projects-table {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.project-card {
+    width: calc(20% - 20px);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+.create-project-card {
+    background-color: #f0f0f0;
+}
+
+.create-project-card form {
+    margin-top: 35px;
+    display: flex;
+    flex-direction: column;
+}
+
+.create-project-card input {
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+.create-project-card button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.add-project-btn {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.project-card, .create-project-card {
+    border: 1px solid #333;
+}

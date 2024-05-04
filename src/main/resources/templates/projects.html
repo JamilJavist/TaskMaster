@@ -1,182 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xlmns:tiles="http://www.thymeleaf.org/extras/tiles"
+      xmlns:xlmns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Отображение проектов</title>
-    <link rel="stylesheet" href="../static/css/styles.css">
+    <title>Project List</title>
+    <link rel="stylesheet" href="../static/css/project-page.css" type="text/css" th:href="@{/css/project-page.css}">
 </head>
 <body>
-<div class="projects-table">
-    <div class="project-card">
-        <h2>Название проекта 1</h2>
-        <p>Описание проекта 1</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 5 дней</p>
-        <p>Дата создания: 01.05.2022</p>
-    </div>
+    <header>
+        <h1>Project List</h1>
+    </header>
 
-    <div class="project-card">
-        <h2>Название проекта 2</h2>
-        <p>Описание проекта 2</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 15 дней</p>
-        <p>Дата создания: 12.05.2022</p>
-    </div>
+    <form action="#" th:action="@{/account/{id}/projects(id=${id})}" method="get" class="search-form">
+        <input type="text" name="prefixName" placeholder="Search by Prefix Name">
+        <button type="submit">Search</button>
+    </form>
 
-    <div class="project-card">
-        <h2>Название проекта 3</h2>
-        <p>Описание проекта 3</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 15 дней</p>
-        <p>Дата создания: 13.05.2022</p>
-    </div>
+    <div class="projects-table">
+        <!-- Карточка для создания проекта -->
+        <div class="project-card create-project-card">
+            <h2>Создать новый проект</h2>
+            <form th:action="@{/account/{id}/projects/create(id=${id})}" method="POST">
+                <input type="text" name="projectName" placeholder="Введите название проекта">
+                <button type="submit">Создать проект</button>
+            </form>
+        </div>
 
-    <div class="project-card">
-        <h2>Название проекта 4</h2>
-        <p>Описание проекта 4</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 15 дней</p>
-        <p>Дата создания: 14.05.2022</p>
-    </div>
+        <div class="project-card">
+            <h2>Название проекта 1</h2>
+            <p>Тема проекта 1</p>
+            <p>Срочность: Низкая</p>
+            <p>Время выполнения: 5 дней</p>
+            <p>Дата создания: 01.05.2022</p>
+        </div>
 
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
+        <div th:each="project : ${projectList}" class="project-card">
+            <h2><span th:text="${project.name}"></span></h2>
+            <p>Дата создания</p><span th:text="${project.createAt}"></span>
+        </div>
     </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-
-    <div class="project-card">
-        <h2>Название проекта 5</h2>
-        <p>Описание проекта 5</p>
-        <p>Срочность: Низкая</p>
-        <p>Время выполнения: 16 дней</p>
-        <p>Дата создания: 18.05.2022</p>
-    </div>
-    <!-- Добавьте остальные карточки проектов сюда -->
-</div>
-<script src="../static/scripts/script.js"></script>
 </body>
 </html>
