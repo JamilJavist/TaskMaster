@@ -3,8 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Project Info</title>
+    <link rel="stylesheet" href="../static/css/project-info-page.css" type="text/css" th:href="@{/css/project-info-page.css}">
 </head>
 <body>
+
+    <header>
+        <h1>Detailed information about project</h1>
+    </header>
+
     <h2>Name of project: <span th:text="${project.name}"></span></h2>
+    <p>Date of created: <span th:text="${project.createAt}"></span></p>
+
+    <form th:action="@{/account/{id}/projects/{projectId}(id=${id},projectId=${project.id})}" method="post">
+        <input type="text" name="projectName" placeholder="Введите новое название проекта">
+        <button type="submit">Переименовать проект</button>
+    </form>
+
+    <form th:action="@{/account/{id}/projects/{projectId}/delete(id=${id},projectId=${project.id})}" method="post">
+        <button class="delete-button" type="submit">Delete Project</button>
+    </form>
 </body>
-</html>

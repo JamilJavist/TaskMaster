@@ -1,6 +1,7 @@
 package org.schizoscript.WebTaskManagementApplication.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.schizoscript.WebTaskManagementApplication.dtos.ProjectDto;
 import org.schizoscript.WebTaskManagementApplication.dtos.factories.ProjectDtoFactory;
 import org.schizoscript.WebTaskManagementApplication.services.ProjectService;
@@ -10,10 +11,7 @@ import org.schizoscript.WebTaskManagementApplication.storage.entities.UserEntity
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -57,8 +55,41 @@ public class ProjectController {
         if (project != null && project.getUser().getId().equals(user.getId())) {
             ProjectDto projectDto = dtoFactory.makeProjectDto(project);
 
-            model.addAttribute("project", project);
+            model.addAttribute("project", projectDto);
             return "project-info";
+        } else {
+            return "redirect:/error/access-denied";
+        }
+    }
+
+    @PostMapping("/account/{id}/projects/{projectId}")
+    public String updateProject(@PathVariable Long id, @PathVariable Long projectId,
+                                @RequestParam(name = "projectName") String newProjectName, Principal principal) {
+
+        UserEntity user = userService.findByEmail(principal.getName());
+
+        ProjectEntity project = projectService.getProjectById(projectId);
+
+        if (project != null && project.getUser().getId().equals(user.getId())) {
+            projectService.editProject(id, projectId, newProjectName);
+
+            return "redirect:/account/{id}/projects/{projectId}";
+        } else {
+            return "redirect:/error/access-denied";
+        }
+    }
+
+    @PostMapping("/account/{id}/projects/{projectId}/delete")
+    public String deleteProject(@PathVariable Long id, @PathVariable Long projectId, Principal principal) {
+
+        UserEntity user = userService.findByEmail(principal.getName());
+
+        ProjectEntity project = projectService.getProjectById(projectId);
+
+        if (project != null && project.getUser().getId().equals(user.getId())) {
+            projectService.deleteProject(id, projectId);
+
+            return "redirect:/account/{id}/projects";
         } else {
             return "redirect:/error/access-denied";
         }

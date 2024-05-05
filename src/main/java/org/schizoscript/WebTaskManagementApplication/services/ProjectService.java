@@ -76,7 +76,7 @@ public class ProjectService {
         return projectRepository.findById(projectId).orElseGet(null);
     }
 
-    private ProjectDto editProject(Long userId, Long projectId, String projectName) {
+    public ProjectDto editProject(Long userId, Long projectId, String projectName) {
 
         if (projectName.trim().isEmpty()) {
             throw new BadRequestException("Project name can't be empty");
@@ -100,7 +100,7 @@ public class ProjectService {
         return dtoFactory.makeProjectDto(project);
     }
 
-    private AckDto deleteProject(Long userId, Long projectId) {
+    public AckDto deleteProject(Long userId, Long projectId) {
         ProjectEntity project = auxService.getEntityOrThrowException(projectRepository, userId, "Project");
 
         projectRepository.deleteById(projectId);

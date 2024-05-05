@@ -1,0 +1,43 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+}
+
+h2, p {
+    color: #000; /* черный цвет текста*/
+    margin-left: 20px;
+}
+
+button {
+    background-color: #333;
+    color: #fff; /* белый цвет текста на кнопке */
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+input[type="text"] {
+    padding: 5px;
+    border: 1px solid #333; /* черная рамка у текстового поля */
+    margin-left: 20px;
+}
+
+button:hover {
+    background-color: #333; /* темный оттенок серого при наведении на кнопку */
+}
+
+.delete-button {
+    background-color: #333;
+    color: #f85149;
+    margin-left: 20px;
+    margin-top: 20px;
+}
