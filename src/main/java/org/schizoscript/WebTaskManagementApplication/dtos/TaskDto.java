@@ -19,9 +19,6 @@ public class TaskDto {
     @NonNull
     private String description;
 
-    @NonNull
-    private Long ordinal;
-
     private Long leftTaskId;
 
     private Long rightTaskId;

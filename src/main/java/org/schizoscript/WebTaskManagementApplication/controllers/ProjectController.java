@@ -3,8 +3,10 @@ package org.schizoscript.WebTaskManagementApplication.controllers;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.schizoscript.WebTaskManagementApplication.dtos.ProjectDto;
+import org.schizoscript.WebTaskManagementApplication.dtos.TaskDto;
 import org.schizoscript.WebTaskManagementApplication.dtos.factories.ProjectDtoFactory;
 import org.schizoscript.WebTaskManagementApplication.services.ProjectService;
+import org.schizoscript.WebTaskManagementApplication.services.TaskService;
 import org.schizoscript.WebTaskManagementApplication.services.UserService;
 import org.schizoscript.WebTaskManagementApplication.storage.entities.ProjectEntity;
 import org.schizoscript.WebTaskManagementApplication.storage.entities.UserEntity;
@@ -21,16 +23,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProjectController {
 
+    private final TaskService taskService;
     private final UserService userService;
-    private final ProjectService projectService;
     private final ProjectDtoFactory dtoFactory;
+    private final ProjectService projectService;
 
     @GetMapping("/account/{id}/projects")
     @PreAuthorize("#id == authentication.principal.id")
     public String getProjects(
             Model model,
             @PathVariable Long id,
-            @RequestParam(name = "prefixName", required = false) Optional<String> prefixName) {
+            @RequestParam(name = "prefixName", required = false) Optional<String> prefixName
+    ) {
         List<ProjectDto> projectList = projectService.fetchProjectsByPrefixName(id, prefixName);
 
         model.addAttribute("projectList", projectList);
@@ -54,8 +58,11 @@ public class ProjectController {
 
         if (project != null && project.getUser().getId().equals(user.getId())) {
             ProjectDto projectDto = dtoFactory.makeProjectDto(project);
+            List<TaskDto> tasksList = taskService.getTasksList(projectId);
 
             model.addAttribute("project", projectDto);
+            model.addAttribute("tasks", tasksList);
+            
             return "project-info";
         } else {
             return "redirect:/error/access-denied";

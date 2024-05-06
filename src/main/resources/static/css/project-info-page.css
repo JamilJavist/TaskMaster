@@ -29,6 +29,7 @@ input[type="text"] {
     padding: 5px;
     border: 1px solid #333; /* черная рамка у текстового поля */
     margin-left: 20px;
+    width: 50%;
 }
 
 button:hover {
@@ -40,4 +41,70 @@ button:hover {
     color: #f85149;
     margin-left: 20px;
     margin-top: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.box {
+    background-color: #fff;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.box h3 {
+    color: #333;
+}
+
+.box p {
+    color: #666;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #333;
+    color: #fff;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: #555;
+}
+
+.task-creator {
+    background-color: #fff;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.task-creator h3 {
+    color: #333;
+}
+
+.task-creator input[type="text"] {
+    padding: 5px;
+    border: 1px solid #333;
+    margin: 5px 0;
+    width: 50%;
+}
+
+.task-creator button {
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.task-creator button:hover {
+    background-color: #555;
 }

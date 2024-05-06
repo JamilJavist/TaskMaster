@@ -11,15 +11,48 @@
         <h1>Detailed information about project</h1>
     </header>
 
-    <h2>Name of project: <span th:text="${project.name}"></span></h2>
-    <p>Date of created: <span th:text="${project.createAt}"></span></p>
+    <div class="container">
+        <div class="box">
+            <h2>Name of project: <span th:text="${project.name}"></span></h2>
+            <p>Date of created: <span th:text="${project.createAt}"></span></p>
 
-    <form th:action="@{/account/{id}/projects/{projectId}(id=${id},projectId=${project.id})}" method="post">
-        <input type="text" name="projectName" placeholder="Введите новое название проекта">
-        <button type="submit">Переименовать проект</button>
-    </form>
+            <form th:action="@{/account/{id}/projects/{projectId}(id=${id},projectId=${project.id})}" method="post">
+                <input type="text" name="projectName" placeholder="Введите новое название проекта">
+                <button type="submit">Переименовать проект</button>
+            </form>
 
-    <form th:action="@{/account/{id}/projects/{projectId}/delete(id=${id},projectId=${project.id})}" method="post">
-        <button class="delete-button" type="submit">Delete Project</button>
-    </form>
+            <form th:action="@{/account/{id}/projects/{projectId}/delete(id=${id},projectId=${project.id})}" method="post">
+                <button class="delete-button" type="submit">Delete Project</button>
+            </form>
+        </div>
+    </div>
+
+    <header>
+        <h1>All tasks in project</h1>
+    </header>
+
+    <div class="container">
+        <div class="box task-creator">
+            <h3>Create a new task</h3>
+            <form th:action="@{/account/{id}/projects/{projectId}/create_task(id=${id},projectId=${project.id})}" method="post">
+                <input type="text" name="taskName" placeholder="Task Name">
+                <input type="text" name="taskDescription" placeholder="Task Description">
+                <button type="submit">Create Task</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="box">
+            <h3>Task 1</h3>
+            <p>Description of Task 1</p>
+            <a href="#" class="btn">Edit</a>
+        </div>
+
+        <div class="box" th:each="task : ${tasks}">
+            <h3><span th:text="${task.name}"></span></h3>
+            <p><span th:text="${task.description}"></span></p>
+            <a href="#" class="btn">Edit</a>
+        </div>
+    </div>
 </body>
