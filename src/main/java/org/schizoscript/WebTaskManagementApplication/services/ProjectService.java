@@ -5,7 +5,6 @@ import org.schizoscript.WebTaskManagementApplication.dtos.AckDto;
 import org.schizoscript.WebTaskManagementApplication.dtos.ProjectDto;
 import org.schizoscript.WebTaskManagementApplication.dtos.factories.ProjectDtoFactory;
 import org.schizoscript.WebTaskManagementApplication.exceptions.BadRequestException;
-import org.schizoscript.WebTaskManagementApplication.exceptions.NotFoundException;
 import org.schizoscript.WebTaskManagementApplication.storage.entities.ProjectEntity;
 import org.schizoscript.WebTaskManagementApplication.storage.entities.UserEntity;
 import org.schizoscript.WebTaskManagementApplication.storage.repositories.ProjectRepository;
@@ -14,11 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Класс ProjectService представляет собой сервисный класс
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -29,6 +30,13 @@ public class ProjectService {
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
 
+    /**
+     * Метод fetchProjectsByPrefixName предназначен для получения всех проектов, либо проектов по префиксу.
+     *
+     * @param userId идентификатор пользователя
+     * @param optionalPrefixName опциональный префикс для поиска проектов
+     * @return список DTO объектов проектов
+     */
     public List<ProjectDto> fetchProjectsByPrefixName(Long userId, Optional<String> optionalPrefixName) {
 
         optionalPrefixName = optionalPrefixName.filter(prefixName -> !prefixName.trim().isEmpty());
@@ -46,6 +54,13 @@ public class ProjectService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Метод createProject предназначен для создания проекта
+     *
+     * @param userId идентификатор пользователя
+     * @param projectName имя проекта, который будет создан
+     * @return объект DTO проекта
+     */
     public ProjectDto createProject(Long userId, String projectName) {
 
         if (projectName.trim().isEmpty()) {
@@ -72,10 +87,24 @@ public class ProjectService {
         return dtoFactory.makeProjectDto(project);
     }
 
+    /**
+     * Метод getProjectById предназначен для получения проекта по его идентификатору
+     *
+     * @param projectId идентификатор проекта
+     * @return сущность проекта
+     */
     public ProjectEntity getProjectById(Long projectId) {
         return projectRepository.findById(projectId).orElseGet(null);
     }
 
+    /**
+     * Метод editProject предназначен для редактирования информации об проекте
+     *
+     * @param userId идентификатор пользователя
+     * @param projectId идентификатор проекта
+     * @param projectName новое имя проекта
+     * @return объект DTO проекта
+     */
     public ProjectDto editProject(Long userId, Long projectId, String projectName) {
 
         if (projectName.trim().isEmpty()) {
@@ -100,11 +129,17 @@ public class ProjectService {
         return dtoFactory.makeProjectDto(project);
     }
 
-    public AckDto deleteProject(Long userId, Long projectId) {
+    /**
+     * Метод deleteProject предназначен для удаления проекта по идентификатору
+     *
+     * @param userId идентификатор пользователя
+     * @param projectId идентификатор проекта
+     */
+    public void deleteProject(Long userId, Long projectId) {
         ProjectEntity project = auxService.getEntityOrThrowException(projectRepository, userId, "Project");
 
         projectRepository.deleteById(projectId);
 
-        return AckDto.makeDefault(true);
+//        return AckDto.makeDefault(true);
     }
 }

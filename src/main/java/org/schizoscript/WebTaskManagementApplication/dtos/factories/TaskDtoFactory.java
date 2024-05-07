@@ -1,13 +1,21 @@
 package org.schizoscript.WebTaskManagementApplication.dtos.factories;
 
-import lombok.RequiredArgsConstructor;
 import org.schizoscript.WebTaskManagementApplication.dtos.TaskDto;
 import org.schizoscript.WebTaskManagementApplication.storage.entities.TaskEntity;
 import org.springframework.stereotype.Component;
 
+/**
+ * Класс TaskDtoFactory служит в качестве фабрики для создания DTO объектов задач
+ */
 @Component
 public class TaskDtoFactory {
 
+    /**
+     * Создает объект TaskDto на основе сущности TaskEntity
+     *
+     * @param entity сущность задачи
+     * @return DTO объект задачи
+     */
     public TaskDto makeTaskDto(TaskEntity entity) {
         return TaskDto.builder()
                 .id(entity.getId())
